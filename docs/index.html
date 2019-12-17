@@ -9,15 +9,36 @@
     <main>
       <section class="text-submission">
         <h2 tabindex="0">Word <span>Watch</span> 👀</h2>
-        <textarea placeholder="Paste text here"></textarea>
-        <button>Break down</button>
+        <textarea id='text', placeholder="Paste text here"></textarea>
+        <button id='my-btn'>Break down</button>
+        <script> async function sendTextData() {
+          const textData = document.getElementById('text').value
+          const request = await fetch('https://wordwatch-api.herokuapp.com/api/v1/words', 
+          { 
+            method: 'POST',
+            body: JSON.stringify({word: { value: `${textData}` }})
+          })
+           return request
+        }
+        </script>
+        <script>document.getElementById('my-btn').addEventListener('click', () => {
+          return sendTextData()
+        })</script>
       </section>
 
       <section class="word-data" tabindex="0">
         <article class="top-word">
           <h3>Top word from Word Watch API: </h3>
         </article>
-        <article class="word-count" tabindex="0">
+        <article class="word-count", id='word-count', tabindex="0">
+          <script>
+            async function getTopWord () {
+              const topWord = await fetch('https://wordwatch-api.herokuapp.com/api/v1/top_word')
+              const response = await topWord.text()
+              document.getElementById('word-count').innerHTML = response
+              }
+            getTopWord()
+          </script>
         </article>
       </section>
     </main>
